@@ -70,43 +70,41 @@ npm run zip
 
 ## Create the service in Lambda
 
-Navigate to https://console.aws.amazon.com/lambda/home.
+* Navigate to https://console.aws.amazon.com/lambda/home.
+* Click the **Create a function** button.
 
-Click the **Get Started** Now button.
+### Step 1 Select blueprint
 
-### Select blueprint
+* Click the **Author from scratch** button.
 
-Click the **Blank Function** blueprint.
+### Step 2 Configure triggers
 
-### Configure triggers
-
-Select the **API Gateway** trigger by clicking the gray dashlined box.
+* Select the **API Gateway** trigger by clicking the gray, dashed-lined box.
+* Click the **Enter value** button where applicable.
 
 ```
 API name:         rest-implementation
 Deployment stage: prod <-- Default
 Security:         AWS IAM <-- Default
 ```
-Click the **Next** button.
+* Click the **Next** button.
 
-### Configure function
+### Step 3 Configure function
+
+* Basic information
 
 ```
 Name:        base
 Description: <null>
 Runtime:     node.js 6.10
 ```
-**Lambda function code**
 
-```
-Code entry type: Upload a .zip file
-```
-
-Click the Upload button and choose the zip file created earlier.
-
-Accept all other defaults.
-
-**Lambda function handler and role**
+* Lambda function code
+  * Select **Upload a .ZIP file** from the **Code entry type** drop down menu.
+  * Click the **Upload** button for **Function package**.
+  * Choose the zip file created earlier.
+  * Accept all other defaults.
+* Lambda function handler and role
 
 ```
 Handler:          index.handler
@@ -114,30 +112,39 @@ Role:             Create new role from template(s)
 Role name:        role
 Policy templates: <null>
 ```
-Accept all other defaults.
 
-Click the **Next** button.
+* Accept all other defaults.
+* Click the **Next** button at the bottom of the page.
 
-### Review
+### Step 4 Review
 
-Click the **Create function** button.
+* Click the **Create function** button at the bottom of the page.
+* The function is created and you are navigated to the Lambda > Functions page for the function.
 
-Function is created and you are navigated to the Lambda > Functions page for the function.
+### Lambda > Functions > base console.
 
-### Function
-
-Click the Test button.
-
-```
-Sample event template: Hello World
-```
-
-Click the **Save and test** button.
+* Click the **Test** button at the top of the page.
+* You should see: "Execution result: succeeded (logs)" with a Details expando.
 
 ## Cleaning up
 
 To clean up:
 
-* Delete the function in Lambda.
-* Delete the role in IAM.
-* Delete the service in API Gateway.
+* Delete the function in **Lambda**.
+  * Click the **Actions** drop down.
+  * Select **Delete function**.
+  * Click the **Delete** button to confirm.
+* Delete the role in **IAM**.
+  * Navigate to https://console.aws.amazon.com/iam/home.
+  * Click **Roles** in the sidebar.
+  * Place a check next to `role` in the list of roles.
+  * Click the **Role actions** drop down.
+  * Select **Delete role**.
+  * Click the **Yes, Delete** button to confirm.
+* Delete the service in **API Gateway**.
+  * Navigate to https://us-west-2.console.aws.amazon.com/apigateway/home.
+  * Click the hyperlink for `rest-implementation`.
+  * Click the **Actions** drop down.
+  * Select **Delete API**.
+  * Enter the name of the API.
+  * Click the **Delete API** button.
