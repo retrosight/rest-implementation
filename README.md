@@ -44,8 +44,9 @@ index.js
 ```javascript
 var package = require("./package.json");
 var base = require("./lib/base.js");
-console.log("loaded " + package.name + ", version " + package.version);
+console.log("{\"package\":\"" + package.name + ",\"version\":\"" + package.version +"\"}");
 exports.handler = function (event, context) {
+  console.log("{\"from\":\"index.exports.handler\",\"to\":\"base.handleRequest\"}");
   base.handleRequest(event, context.done);
 }
 ```
@@ -54,6 +55,7 @@ lib/base.js
 
 ```javascript
 exports.handleRequest = function (requestData, callback) {
+  console.log("{\"enter\":\"base.handleRequest\"}");
   var responseData = {received_as_input: requestData};
   callback(null, responseData);
 }
