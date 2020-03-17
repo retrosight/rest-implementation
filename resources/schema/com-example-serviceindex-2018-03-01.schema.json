@@ -1,0 +1,147 @@
+{
+  "$id": "https://example.com/schemas/com-example-serviceindex-2018-03-01.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Service Index Version 2018-03-01",
+  "description": "A modified schema for JSON Home documents based upon in part on https://mnot.github.io/I-D/json-home/#RFC7159",
+  "type": "object",
+  "properties": {
+    "schema": {
+      "type": "string",
+       "description": "RFC 3986 Uniform Resource Identifier (URI): Generic Syntax. Provides the self documentating feature for the resource / representation. Analogous to the 'describedby' relation type from RFC 5988 Web Linking"
+    },
+    "href": {
+      "$ref": "#/definitions/hrefDefinition",
+      "description": "Identifier and hyperlink (aka 'self') for this JSON home resource using RFC 3986 Uniform Resource Identifier (URI): Generic Syntax."
+    },
+    "title": {
+      "type": "string",
+      "description": "The human readable title of the API described by this service index resource."
+    },
+    "vars": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/varsDefinition" },
+      "description": "An array of variables to be used with hyperlink templates given in the document."
+    },
+    "resources": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/resourcesDefinition" },
+      "description": "An array of resources and hints about the resources used by humans writing client code and the client code itself."
+    }
+  },
+  "required": [ "schema", "href", "resources" ],
+  "definitions": {
+    "hrefDefinition": {
+      "type": "string",
+      "description": "Link to a resource using RFC 3986 Uniform Resource Identifier (URI): Generic Syntax or RFC 6570 URI Template."
+    },
+    "varsDefinition": {
+      "type": "object",
+      "properties": {
+        "varName": {
+          "type": "string",
+           "description": "The variable name."
+        },
+        "varDefinition": {
+          "type": "string",
+           "description": "Link to a definition for the variable using RFC 3986 Uniform Resource Identifier (URI): Generic Syntax."
+        },
+        "varValue": {
+          "type": "string",
+           "description": "The variable value."
+        }
+      },
+      "required": [ "varName" ]
+    },
+    "resourcesDefinition": {
+      "type": "object",
+      "properties": {
+        "rel": {
+          "type": "string",
+          "description": "A RFC 5988 Web Linking Link: link relation type. Examples: `author`, `describedBy`."
+        },
+        "href": {
+          "$ref": "#/definitions/hrefDefinition"
+        },
+        "hints": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/hintsDefinition" },
+          "description": "Hints provided to both humans writing the client code and the client code itself, describing the resource and activities available for a given link relation."
+        }
+      },
+      "required": [ "rel", "href", "hints" ]
+    },
+    "hintsDefinition": {
+      "type": "object",
+      "properties": {
+        "method": {
+          "type": "string",
+           "description": "Valid method names are RFC 7231 Hypertext Transfer Protocol (HTTP/1.1): Semantics and Content methods `GET`, `HEAD`, `POST`, `PUT`, `DELETE`, `CONNECT`, `OPTIONS` and `TRACE` plus the `PATCH` method from RFC 5789 PATCH Method for HTTP."
+        },
+        "formats": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Hints the representation types that the resource produces and consumes, aligned with the ‘method’ hint."
+        },
+        "profiles": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Links to the schema(s) (typically JSON schema) which define payloads the endpoint will generally accept. Based on RFC 6096 The 'profile' Link Relation Type https://tools.ietf.org/html/rfc6906"
+        },
+        "preconditionRequired": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Hints that the resource requires state-changing requests (e.g., PUT, PATCH) using RFC 7232 Hypertext Transfer Protocol (HTTP/1.1): Conditional Requests to avoid conflicts due to concurrent updates. Examples: `etag`, `last-modified` and `If-Match`."
+        },
+        "acceptRanges": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Hints the range-specifiers available to the client for this resource; equivalent to the `Accept-Ranges` HTTP response header in RFC 7233 Hypertext Transfer Protocol (HTTP/1.1): Range Requests."
+        },
+        "docs": {
+          "type": "string",
+          "description": "Hints the location for human-readable documentation for the relation type of the resource, a RFC 3986 Uniform Resource Identifier (URI): Generic Syntax referring to documentation that SHOULD be in HTML format."
+        },
+        "status": {
+          "type": "object",
+          "description": "Hints the status of the resource.",
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "The service index document uses existing HTTP status codes to hint the likely outcome of using an endpoint, for example: `410 Gone` (no longer available), `301 Moved Permanently` or `308 Permanent Redirect` (choices for deprecation of an endpoint)."
+            },
+            "rels": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "When the code is `301 Moved Permanently` or `308 Permanent Redirect` the `rel` points the consumer of this document to the alternative resource(s)."
+            }
+          }
+        },
+        "authSchemes": {
+          "type": "array",
+          "description": "Hints the resource requires authentication using RFC 7235 Hypertext Transfer Protocol (HTTP/1.1): Authentication.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "scheme": {
+                "type": "string",
+                 "description": "An HTTP authentication scheme according to RFC 7235 Hypertext Transfer Protocol (HTTP/1.1): Authentication."
+              },
+              "realms": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "An array of zero to many strings that identify RFC 7235 Hypertext Transfer Protocol (HTTP/1.1): Authentication protection spaces (realms) for the resource."
+              },
+            },
+            "required": [ "scheme" ]
+          }
+        },
+        "prefer": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Hints the RFC 7240 Prefer Header for HTTP supported by the resource. Note that, as per the RFC, a preference can be ignored by the server."
+        }
+      },
+      "required": [ "method" ],
+    }
+  }
+}

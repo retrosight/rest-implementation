@@ -1,0 +1,25 @@
+{
+  "schema": "https://example.com/schemas/com-example-serviceindex-2018-03-01.schema.json",
+  "href": "https://example.com/apis",
+  "title": "The API for Example",
+  "resources": [
+    {
+      "rel": "accounts-2017-05-25",
+      "href": "https://example.com/accounts",
+      "hints": [
+        {
+          "method": "post",
+          "formats": [ "application/json" ],
+          "profiles": [ "https://example.com/schemas/com-example-accountinfo-2018-03-01.schema.json" ],
+          "docs": "https://example.com/apis/creating-an-account.html"
+        },
+        {
+          "method": "get",
+          "formats": [ "application/json", "text/xml" ],
+          "profiles": [ "https://example.com/schemas/com-example-accountinfo-2018-03-01.schema.json" ],
+          "docs": "https://example.com/apis/listing-accounts.html"
+        }
+      ]
+    }
+  ]
+}

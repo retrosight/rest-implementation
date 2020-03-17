@@ -1,0 +1,205 @@
+{
+  "$id": "",
+
+  "$schema": "http://json-schema.org/draft-07/schema#",
+
+  "$ref": "",
+
+  "$comment":"",
+
+  "title": "Template Schema",
+
+  "description": "This template contains many of the major JSON schema types and keywords - use for building other schemas.",
+
+  "default": true,
+
+  "readOnly": true,
+
+  "examples": [ ],
+
+  "type": "object",
+
+  "allOf": [{
+    "$ref": "https://example.com/schemas/com-example-base-2018-03-01.schema.json"
+  }],
+
+  "anyOf": [{
+    "$ref": "https://example.com/schemas/com-example-base-2018-03-01.schema.json"
+  }],
+
+  "oneOf": [{
+    "$ref": "https://example.com/schemas/com-example-base-2018-03-01.schema.json"
+  }],
+
+  "not": {
+    "$ref": "https://example.com/schemas/com-example-base-2018-03-01.schema.json"
+  },
+
+  "comment": "`default` and `enum` are available for all instance types.",
+
+  "default": "value",
+
+  "comment": "`enum` can be of any type, including null.",
+
+  "enum": [1, 2, 3],
+
+  "properties": {
+
+    "keyNameString": {
+      "type": "string",
+      "description": ""
+    },
+
+    "keyNameStringAll": {
+      "type": "string",
+      "maxLength": 1,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z]{4}$"
+    },
+
+    "keyNameNumber": { "type": "number" },
+
+    "keyNameNumberAll": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 0,
+      "exclusiveMinimum": true,
+      "exclusiveMaximum": true,
+      "multipleOf": 1
+    },
+
+    "keyNameBoolean": {
+      "type": "boolean",
+      "description": ""
+    },
+
+    "keyNameInteger": {
+      "type": "integer",
+      "description": ""
+    },
+
+    "keyNameIntegerAll": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 0,
+      "exclusiveMinimum": true,
+      "exclusiveMaximum": true,
+      "multipleOf": 1
+    },
+
+    "keyNameWithDefinitionInternal": { "$ref": "#/definitions/keyNameDefinition" },
+
+    "keyNameWithDefinitionExternal": { "$ref": "https://example.com/schemas/common#/definitions/dateTime" },
+
+    "keyNameArraySingleItems": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": ""
+    },
+
+    "keyNameArrayOfObjects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "keyNameString": {
+            "type": "string",
+             "description": ""
+          }
+        },
+        "required": ["keyNameString"]
+      },
+      "additionalItems": false,
+      "maxItems": 1,
+      "minItems": 1,
+      "uniqueItems": false
+    },
+
+    "keyNameArrayReference": {
+      "type": "array",
+      "items": { "$ref": "https://example.com/schemas/com-example-base-2018-03-01.schema.json" }
+    },
+
+    "keyNameObject": { "type": "object" },
+
+    "comment": "object: additionalProperties must be a boolean or an object.",
+
+    "keyNameObjectAll": {
+      "type": "object",
+      "maxProperties": 0,
+      "minProperties": 0,
+      "required": ["string1", "string2"],
+      "additionalProperties": true,
+      "properties": {},
+      "patternProperties": {}
+    },
+
+    "keyNameNull": { "type": "null" },
+
+    "keyNameNull": {
+      "type": "null"
+    },
+
+  },
+
+  "required": ["keyNameString", "keyNameNumber"],
+
+  "definitions": {
+
+    "keyNameDefinition": {
+      "type": "string",
+      "description": "",
+      "pattern": "^[a-zA-Z]{4}$"
+    },
+
+    "keyNameDefinitionProps": {
+      "type": "object",
+      "properties": {
+        "keyNameString": {
+          "type": "string",
+           "description": ""
+        }
+      },
+      "required": ["keyNameString"],
+      "additionalProperties": false
+    },
+
+    "schemaArray": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#" }
+    },
+
+    "nonNegativeInteger": {
+      "type": "integer",
+      "minimum": 0
+    },
+
+    "nonNegativeIntegerDefault0": {
+      "allOf": [
+        { "$ref": "#/definitions/nonNegativeInteger" },
+        { "default": 0 }
+      ]
+    },
+
+    "simpleTypes": {
+      "enum": [
+        "array",
+        "boolean",
+        "integer",
+        "null",
+        "number",
+        "object",
+        "string"
+      ]
+    },
+
+    "stringArray": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true,
+      "default": []
+    }
+
+  }
+}
