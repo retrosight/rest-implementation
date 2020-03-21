@@ -1,6 +1,7 @@
 import os
 import logging
 import flask
+import uuid
 from urllib.parse import urlparse
 from flask import send_file
 from flask import request
@@ -10,8 +11,16 @@ from flask import make_response
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
-logging.basicConfig(level=os.environ.get("LOGLEVEL", "DEBUG"))
 log = logging.getLogger(__name__)
+logging.basicConfig(level=os.environ.get("LOGLEVEL", "DEBUG"))
+
+def main():
+
+    if __name__ == '__main__':
+        main()
+        return
+
+    return
 
 def pulloutpath(parsed):
 
@@ -77,8 +86,6 @@ def bars(collection):
 
     elif request.method in ['POST']:
 
-        # curl -v --data "temp" http://127.0.0.1:5000/bars
-
         # In rough order of operations...
         # ToDo: Check the content-type header = application/json.
         # ToDo: Validate the incoming data against the schema referenced in the data.
@@ -89,11 +96,20 @@ def bars(collection):
         # ToDo: Respond with the ETag header.
         # ToDo: Respond with the resource representation in the payload.
 
+        # curl -v -X POST http://127.0.0.1:5000/schema
+        # curl -v --data "temp" http://127.0.0.1:5000/bars
+
         log.info('POST')
 
-        abort(501)
-
-        return
+        try:
+            id = uuid.uuid4()
+            log.info(str(id))
+            response = make_response(jsonify(id=str(id)), 201)
+            response.headers["Location"] = "https://example.com/" + str(id)
+            return response
+        except Exception as e:
+            abort(500)
+            return
 
 @app.route('/<string:collection>/<string:id>', methods=['GET', 'HEAD', 'PUT'])
 def barsindividual(collection,id):
@@ -162,7 +178,7 @@ def not_implemented_404(e):
     return response
 
 @app.errorhandler(500)
-def not_implemented_500(e):
+def server_error_500(e):
 
     response = make_response(jsonify({}), 500)
     log.debug(e)
