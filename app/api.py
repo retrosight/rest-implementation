@@ -1,16 +1,24 @@
 import os
 import logging
-import flask
 import uuid
 from urllib.parse import urlparse
-from flask import send_file
-from flask import request
+import flask
 from flask import abort
+from flask import Flask
 from flask import jsonify
 from flask import make_response
+from flask import redirect
+from flask import request
+from flask import send_file
+from flask import url_for
+from werkzeug.utils import secure_filename
 
-app = flask.Flask(__name__)
+UPLOAD_FOLDER = '/resources'
+ALLOWED_EXTENSIONS = { 'json' }
+
+app = Flask(__name__)
 app.config["DEBUG"] = True
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 log = logging.getLogger(__name__)
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "DEBUG"))
 
@@ -33,6 +41,10 @@ def pulloutpath(parsed):
     except Exception as e:
         abort(500)
         return
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/', methods=['GET', 'HEAD'])
 def home():
@@ -59,7 +71,7 @@ def home():
         abort(500)
         return
 
-@app.route('/<string:collection>', methods=['GET', 'HEAD', 'POST'])
+@app.route('/<string:collection>', methods=['GET','HEAD','POST'])
 def bars(collection):
 
     # ToDo: Have this handle the /bars/ path as well.
@@ -102,13 +114,31 @@ def bars(collection):
         log.info('POST')
 
         try:
+            log.info('try')
+            log.info('file')
+            file = request.files('file')
+        except Exception as e:
+            abort(400)
+            return
+
+        try:
+            if 'file' not in request.files:
+                abort(400)
+                return
+            if file.filename == '':
+                abort(400)
+                return
+            if file and allowed_file(file.filename):
+                log.info('Hi')
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             id = uuid.uuid4()
             log.info(str(id))
             response = make_response(jsonify(id=str(id)), 201)
-            response.headers["Location"] = "https://example.com/" + str(id)
+            response.headers["Location"] = "https://example.com/" + str(filename)
             return response
         except Exception as e:
-            abort(500)
+            # abort(500)
             return
 
 @app.route('/<string:collection>/<string:id>', methods=['GET', 'HEAD', 'PUT'])
